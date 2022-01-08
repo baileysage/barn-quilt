@@ -102,8 +102,6 @@ function draw() {
     }
 }
 
-let triPosition = -1;
-
 function calcTrianglePosition(xPos, yPos) {
     xVal = Math.floor(xPos / squareSize);
     yCol = Math.floor(yPos / squareSize);
@@ -127,7 +125,11 @@ function calcTrianglePosition(xPos, yPos) {
             yVal = yCol * 2;
         }
     }
-    triPosition = 8 * yVal + xVal;
+    return squareWidth * yVal + xVal;
+}
+
+function calcVerticalSymmetry(triPosition) {
+    return triPosition - (triPosition % squareWidth) + (squareWidth - 1 - (triPosition % squareWidth));
 }
 
 let isMousePressed = false;
@@ -143,23 +145,26 @@ function isMouseOverGrid() {
         return false;
     }
 }
-
 function mousePressed() {
     isMousePressed = true;
+    triPosition = -1;
     if (isMouseOverGrid()) {
-        calcTrianglePosition(mouseX, mouseY);
+        triPosition = calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
         tris[triPosition].update(color(255, 255, 255));
+        tris[calcVerticalSymmetry(triPosition)].update(color(255, 255, 255));
     }
 }
 
 function mouseDragged() {
+    triPosition = -1;
     if (isMousePressed && isMouseOverGrid()) {
-        calcTrianglePosition(mouseX, mouseY);
+        triPosition = calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
         tris[triPosition].update(color(255, 255, 255));
+        tris[calcVerticalSymmetry(triPosition)].update(color(255, 255, 255));
     }
 }
 
@@ -168,5 +173,4 @@ function mouseReleased() {
     if (triPosition >= 0) {
         resetColors();
     }
-    triPosition = -1;
 }
