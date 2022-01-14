@@ -30,7 +30,7 @@ function mousePressed() {
     }
     if (triPosition >= 0) {
         triMatrix.tris[triPosition].update(color(255, 255, 255));
-        triMatrix.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(color(255, 255, 255));
+        triMatrix.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(color(255, 255, 255));
     }
 }
 
@@ -41,7 +41,7 @@ function mouseDragged() {
     }
     if (triPosition >= 0) {
         triMatrix.tris[triPosition].update(color(255, 255, 255));
-        triMatrix.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(color(255, 255, 255));
+        triMatrix.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(color(255, 255, 255));
     }
 }
 

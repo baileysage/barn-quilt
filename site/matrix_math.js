@@ -61,13 +61,12 @@ class LEDTri {
             }
             else if (this.y % 4 == 1) { // bottom right
                 triangle(sX, sY + this.sideLen, sX + this.sideLen, sY, sX + this.sideLen, sY + this.sideLen);
-
             }
         }
     }
 }
 
-class LEDTriMatrix{
+class LEDTriMatrix {
     constructor(matrixWidth, triSize) {
         this.matrixWidth = matrixWidth;
         this.triSize = triSize;
@@ -81,7 +80,7 @@ class LEDTriMatrix{
         }
     }
 
-    totalWidth(){
+    totalWidth() {
         return this.triSize * this.matrixWidth
     }
 
@@ -94,10 +93,10 @@ class LEDTriMatrix{
                 let b = map(y, 0, this.matrixWidth, 0, 255);
                 this.tris[index++] = new LEDTri(
                     x,
-                    y,  
+                    y,
                     this.triSize,
                     color(r, g, b),
-                    m_leds[(index - 1) % 64]
+                    index - 1 //m_leds[(index - 1) % 64]
                 );
             }
         }
@@ -131,6 +130,13 @@ class LEDTriMatrix{
 
     calcVerticalSymmetry(triPosition) {
         return triPosition - (triPosition % this.matrixWidth) + (this.matrixWidth - 1 - (triPosition % this.matrixWidth));
+    }
+
+
+    calcHorizontalSymmetry(triPosition) {
+        let xCol = triPosition % this.matrixWidth;
+        let yRow = (triPosition - xCol) / this.matrixWidth;
+        return ((this.matrixWidth * 2) - yRow - 1) * this.matrixWidth + xCol;
     }
 
 }
