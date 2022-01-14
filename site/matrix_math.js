@@ -90,14 +90,14 @@ class LEDTriMatrix{
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
                 let r = map(x, 0, this.matrixWidth, 0, 255);
-                let g = map(m_leds[index], 0, 127, 0, 255);
+                let g = map(m_leds[index % 64], 0, 127, 0, 255);
                 let b = map(y, 0, this.matrixWidth, 0, 255);
                 this.tris[index++] = new LEDTri(
                     x,
-                    y,
+                    y,  
                     this.triSize,
                     color(r, g, b),
-                    m_leds[index - 1]
+                    m_leds[(index - 1) % 64]
                 );
             }
         }
