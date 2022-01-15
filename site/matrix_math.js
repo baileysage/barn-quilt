@@ -21,6 +21,7 @@ const Symmetry = {
     Vertical: 'Vertical',
     Horizontal: 'Horizontal',
     Full: 'Full',
+   // Block: 'Block', // TODO: Add block size and repeat functions
     None: 'None'
 };
 
@@ -140,17 +141,35 @@ class LEDTriMatrix {
         } 
     }
 
+    isControllable(triPosition){
+        switch(this.sym) {
+            case Symmetry.None:
+                return true;
+            case Symmetry.Vertical:
+                return triPosition % this.matrixWidth < this.matrixWidth / 2;
+            case Symmetry.Horizontal:
+                return triPosition < this.matrixWidth * this.matrixWidth;
+            case Symmetry.Full:
+                return (triPosition < this.matrixWidth * this.matrixWidth) && 
+                        (triPosition % this.matrixWidth < this.matrixWidth / 2);
+            default: 
+                return false;
+        }
+    }
+
     resetColors(defaultColor) {
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                this.tris[index++] = new LEDTri(
+                let drawColor = this.isControllable(index) ? defaultColor : color(150, 150, 150);
+                this.tris[index] = new LEDTri(
                     x,
                     y,
                     this.triSize,
-                    defaultColor,
-                    index - 1 //m_leds[(index - 1) % 64]
+                    drawColor,
+                    index //m_leds[(index - 1) % 64]
                 );
+                index++;
             }
         }
     }
