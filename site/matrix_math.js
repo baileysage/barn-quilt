@@ -17,6 +17,13 @@ let m_leds = [
     0, 31, 32, 63, 64, 95, 96, 127
 ];
 
+const Symmetry = {
+    Vertical: 'Vertical',
+    Horizontal: 'Horizontal',
+    Full: 'Full',
+    None: 'None'
+};
+
 class LEDTri {
     constructor(x, y, sideLen, fillColor, ledNum) {
         this.x = x;
@@ -67,10 +74,11 @@ class LEDTri {
 }
 
 class LEDTriMatrix {
-    constructor(matrixWidth, triSize) {
+    constructor(matrixWidth, triSize, sym) {
         this.matrixWidth = matrixWidth;
         this.triSize = triSize;
         this.tris = [];
+        this.sym = sym;
     }
 
     draw() {
@@ -80,22 +88,67 @@ class LEDTriMatrix {
         }
     }
 
+    update(triPosition, newColor){
+        switch(this.sym) {
+            case Symmetry.None:
+                this.tris[triPosition].update(newColor);
+                break;
+            case Symmetry.Vertical:
+                this.tris[triPosition].update(newColor);
+                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
+                break;
+            case Symmetry.Horizontal:
+                this.tris[triPosition].update(newColor);
+                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
+                break;
+            case Symmetry.Full:
+                this.tris[triPosition].update(newColor);
+                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
+                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
+                this.tris[triMatrix.calc180Symmetry(triPosition)].update(newColor);
+                break;
+            default: 
+                this.tris[triPosition].update(newColor);
+        } 
+    }
+
     totalWidth() {
         return this.triSize * this.matrixWidth
+    }
+
+    controllableWidth(){
+        switch(this.sym) {
+            case Symmetry.Vertical:
+            case Symmetry.Full:
+                return this.totalWidth() / 2;
+            case Symmetry.Horizontal:
+            case Symmetry.None:
+            default: 
+                return this.totalWidth();
+        } 
+    }
+
+    controllableHeight(){
+        switch(this.sym) {
+            case Symmetry.Horizontal:
+            case Symmetry.Full:
+                return this.totalWidth() / 2;
+            case Symmetry.Vertical:
+            case Symmetry.None:
+            default: 
+                return this.totalWidth();
+        } 
     }
 
     resetColors() {
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                let r = map(x, 0, this.matrixWidth, 0, 255);
-                let g = map(m_leds[index % 64], 0, 127, 0, 255);
-                let b = map(y, 0, this.matrixWidth, 0, 255);
                 this.tris[index++] = new LEDTri(
                     x,
                     y,
                     this.triSize,
-                    color(r, g, b),
+                    color(0, 0, 0),
                     index - 1 //m_leds[(index - 1) % 64]
                 );
             }
@@ -137,6 +190,10 @@ class LEDTriMatrix {
         let xCol = triPosition % this.matrixWidth;
         let yRow = (triPosition - xCol) / this.matrixWidth;
         return ((this.matrixWidth * 2) - yRow - 1) * this.matrixWidth + xCol;
+    }
+
+    calc180Symmetry(triPosition){
+        return this.calcHorizontalSymmetry(this.calcVerticalSymmetry(triPosition));
     }
 
 }

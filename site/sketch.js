@@ -1,4 +1,5 @@
-let triMatrix = new LEDTriMatrix(8, 60);
+let triMatrix = new LEDTriMatrix(8, 60, Symmetry.None);
+
 
 function setup() {
     createCanvas(480, 480);
@@ -13,9 +14,9 @@ let isMousePressed = false;
 
 function isMouseOverGrid() {
     if (mouseX > 0 &&
-        mouseX < triMatrix.totalWidth() &&
+        mouseX < triMatrix.controllableWidth()  &&
         mouseY > 0 &&
-        mouseY < triMatrix.totalWidth()) {
+        mouseY < triMatrix.controllableHeight() ) {
         return true;
     }
     else {
@@ -29,8 +30,7 @@ function mousePressed() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.tris[triPosition].update(color(255, 255, 255));
-        triMatrix.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(color(255, 255, 255));
+        triMatrix.update(triPosition, color(255, 255, 255));
     }
 }
 
@@ -40,8 +40,7 @@ function mouseDragged() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.tris[triPosition].update(color(255, 255, 255));
-        triMatrix.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(color(255, 255, 255));
+        triMatrix.update(triPosition, color(255, 255, 255));
     }
 }
 
