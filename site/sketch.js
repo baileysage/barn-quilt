@@ -3,7 +3,7 @@ let triMatrix = new LEDTriMatrix(8, 60, Symmetry.None);
 
 function setup() {
     createCanvas(480, 480);
-    triMatrix.resetColors();
+    triMatrix.resetColors(color(200, 40, 0));
 }
 
 function draw() {
@@ -47,6 +47,6 @@ function mouseDragged() {
 function mouseReleased() {
     isMousePressed = false;
     if (triPosition >= 0) {
-        triMatrix.resetColors();
+        triMatrix.resetColors(color(200, 40, 0));
     }
 }

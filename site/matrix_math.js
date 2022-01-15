@@ -140,7 +140,7 @@ class LEDTriMatrix {
         } 
     }
 
-    resetColors() {
+    resetColors(defaultColor) {
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
@@ -148,7 +148,7 @@ class LEDTriMatrix {
                     x,
                     y,
                     this.triSize,
-                    color(0, 0, 0),
+                    defaultColor,
                     index - 1 //m_leds[(index - 1) % 64]
                 );
             }
