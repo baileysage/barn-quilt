@@ -5,3 +5,7 @@ html, body {
 canvas {
     display: block;
 }
+
+button {
+    background-color: lightgrey;
+}
