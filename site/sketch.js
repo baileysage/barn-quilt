@@ -3,7 +3,7 @@ var background_color_pick;
 var foreground_color_pick;
 
 function setup() {
-    const canvas = createCanvas(700, 480);
+    const canvas = createCanvas(750, 480);
     canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     background("white");
 
@@ -123,10 +123,10 @@ function mousePressed() {
     }
     if (triPosition >= 0) {
         if (mouseButton == LEFT){
-            triMatrix.update(triPosition, foreground_color_pick.color());
+            triMatrix.update(triPosition, foreground_color_pick.color(), true);
         }
         if (mouseButton == RIGHT){
-            triMatrix.update(triPosition, background_color_pick.color());
+            triMatrix.update(triPosition, background_color_pick.color(), false);
         }
     }
 }
@@ -138,10 +138,10 @@ function mouseDragged() {
     }
     if (triPosition >= 0) {
         if (mouseButton == LEFT){
-            triMatrix.update(triPosition, foreground_color_pick.color());
+            triMatrix.update(triPosition, foreground_color_pick.color(), true);
         }
         if (mouseButton == RIGHT){
-            triMatrix.update(triPosition, background_color_pick.color());
+            triMatrix.update(triPosition, background_color_pick.color(), false);
         }
     }
 }
