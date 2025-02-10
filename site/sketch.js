@@ -7,21 +7,25 @@ function setup() {
     background("white");
 
     noSymbutton = createButton('No Symmetry');
-    noSymbutton.position(550, 65);
+    noSymbutton.position(550, 35);
     noSymbutton.mousePressed(setNoSymmetry);
     noSymbutton.style('background-color', "lightskyblue");
 
     hSymbutton = createButton('Horizontal Symmetry');
-    hSymbutton.position(550, 95);
+    hSymbutton.position(550, 65);
     hSymbutton.mousePressed(setHorizSymmetry);
 
     vSymbutton = createButton('Vertical Symmetry');
-    vSymbutton.position(550,125);
+    vSymbutton.position(550,95);
     vSymbutton.mousePressed(setVertSymmetery);
 
-    fSymbutton = createButton('Full Symmetry');
-    fSymbutton.position(550, 155);
+    fSymbutton = createButton('Horiz AND Vert Symmetry');
+    fSymbutton.position(550, 125);
     fSymbutton.mousePressed(setFullSymmetry);
+
+    rSymbutton = createButton('Rotational Symmetry');
+    rSymbutton.position(550, 155);
+    rSymbutton.mousePressed(setRotationalSymmetry);
 
     resetbutton = createButton('Reset');
     resetbutton.position(550, 185);
@@ -48,6 +52,7 @@ function setNoSymmetry(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -57,6 +62,7 @@ function setHorizSymmetry(){
     hSymbutton.style('background-color', "lightskyblue");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -66,6 +72,7 @@ function setVertSymmetery(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightskyblue");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -75,6 +82,17 @@ function setFullSymmetry(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightskyblue");
+    rSymbutton.style('background-color', "lightgrey");
+    resetGrid();
+}
+
+function setRotationalSymmetry(){
+    triMatrix.sym = Symmetry.Rotational;
+    noSymbutton.style('background-color', "lightgrey");
+    hSymbutton.style('background-color', "lightgrey");
+    vSymbutton.style('background-color', "lightgrey");
+    fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightskyblue");
     resetGrid();
 }
 

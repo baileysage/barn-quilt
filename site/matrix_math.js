@@ -21,7 +21,7 @@ const Symmetry = {
     Vertical: 'Vertical',
     Horizontal: 'Horizontal',
     Full: 'Full',
-   // Block: 'Block', // TODO: Add block size and repeat functions
+    Rotational: 'Rotational',
     None: 'None'
 };
 
@@ -108,6 +108,11 @@ class LEDTriMatrix {
                 this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
                 this.tris[triMatrix.calc180Symmetry(triPosition)].update(newColor);
                 break;
+            case Symmetry.Rotational:
+                this.tris[triPosition].update(newColor);
+                this.tris[this.calc90RotationalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calc180RotationalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calc270RotationalSymmetry(triPosition)].update(newColor);
             default: 
                 this.tris[triPosition].update(newColor);
         } 
@@ -121,6 +126,7 @@ class LEDTriMatrix {
         switch(this.sym) {
             case Symmetry.Vertical:
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return this.totalWidth() / 2;
             case Symmetry.Horizontal:
             case Symmetry.None:
@@ -133,6 +139,7 @@ class LEDTriMatrix {
         switch(this.sym) {
             case Symmetry.Horizontal:
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return this.totalWidth() / 2;
             case Symmetry.Vertical:
             case Symmetry.None:
@@ -150,6 +157,7 @@ class LEDTriMatrix {
             case Symmetry.Horizontal:
                 return triPosition < this.matrixWidth * this.matrixWidth;
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return (triPosition < this.matrixWidth * this.matrixWidth) && 
                         (triPosition % this.matrixWidth < this.matrixWidth / 2);
             default: 
@@ -211,8 +219,22 @@ class LEDTriMatrix {
         return ((this.matrixWidth * 2) - yRow - 1) * this.matrixWidth + xCol;
     }
 
-    calc180Symmetry(triPosition){
+    calcVertAndHorizSymmetry(triPosition){
         return this.calcHorizontalSymmetry(this.calcVerticalSymmetry(triPosition));
+    }
+
+    calc90RotationalSymmetry(triPosition) {
+        let xCol = triPosition % this.matrixWidth;
+        let yRow = (triPosition - xCol) / this.matrixWidth;
+        return triPosition;
+    }
+
+    calc180RotationalSymmetry(triPosition) {
+        return this.matrixWidth * this.matrixWidth * 2 - triPosition - 1;
+    }
+
+    calc270RotationalSymmetry(triPosition) {
+        return triPosition;
     }
 
 }
