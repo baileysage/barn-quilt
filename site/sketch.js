@@ -1,9 +1,10 @@
 let triMatrix = new LEDTriMatrix(8, 60, Symmetry.None);
-var color_a_pick;
-var color_b_pick;
+var background_color_pick;
+var foreground_color_pick;
 
 function setup() {
-    createCanvas(700, 480);
+    const canvas = createCanvas(700, 480);
+    canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     background("white");
 
     noSymbutton = createButton('No Symmetry');
@@ -31,10 +32,10 @@ function setup() {
     resetbutton.position(550, 185);
     resetbutton.mousePressed(resetGrid);
 
-    color_a_pick = createColorPicker("red");
-    color_a_pick.position(550, 215);
-    color_b_pick = createColorPicker("yellow");
-    color_b_pick.position(550, 255);
+    background_color_pick = createColorPicker("red");
+    background_color_pick.position(550, 235);
+    foreground_color_pick = createColorPicker("yellow");
+    foreground_color_pick.position(550, 285);
     
     resetGrid();
 }
@@ -42,8 +43,9 @@ function setup() {
 function draw() {
     triMatrix.draw();
     fill(color(0, 0, 0));
-    text("Color A", 615, 227);
-    text("Color B", 615, 267);
+    text("Background Color", 542, 220);
+    text("Foreground Color", 542, 270);
+
 }
 
 function setNoSymmetry(){
@@ -97,7 +99,7 @@ function setRotationalSymmetry(){
 }
 
 function resetGrid(){
-    triMatrix.resetColors(color_a_pick.color());
+    triMatrix.resetColors(background_color_pick.color());
 }
 
 let isMousePressed = false;
@@ -120,7 +122,12 @@ function mousePressed() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.update(triPosition, color_b_pick.color());
+        if (mouseButton == LEFT){
+            triMatrix.update(triPosition, foreground_color_pick.color());
+        }
+        if (mouseButton == RIGHT){
+            triMatrix.update(triPosition, background_color_pick.color());
+        }
     }
 }
 
@@ -130,7 +137,12 @@ function mouseDragged() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.update(triPosition, color_b_pick.color());
+        if (mouseButton == LEFT){
+            triMatrix.update(triPosition, foreground_color_pick.color());
+        }
+        if (mouseButton == RIGHT){
+            triMatrix.update(triPosition, background_color_pick.color());
+        }
     }
 }
 
