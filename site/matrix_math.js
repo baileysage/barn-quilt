@@ -96,17 +96,17 @@ class LEDTriMatrix {
                 break;
             case Symmetry.Vertical:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(newColor);
                 break;
             case Symmetry.Horizontal:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(newColor);
                 break;
             case Symmetry.Full:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
-                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
-                this.tris[triMatrix.calc180Symmetry(triPosition)].update(newColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcVertAndHorizSymmetry(triPosition)].update(newColor);
                 break;
             case Symmetry.Rotational:
                 this.tris[triPosition].update(newColor);
