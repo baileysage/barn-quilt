@@ -25,6 +25,8 @@ const Symmetry = {
     None: 'None'
 };
 
+const nonEditableColor = color(150, 150, 150);
+
 class LEDTri {
     constructor(x, y, sideLen, fillColor, ledNum) {
         this.x = x;
@@ -169,7 +171,7 @@ class LEDTriMatrix {
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                let drawColor = this.isControllable(index) ? defaultColor : color(150, 150, 150);
+                let drawColor = this.isControllable(index) ? defaultColor : nonEditableColor;
                 this.tris[index] = new LEDTri(
                     x,
                     y,
