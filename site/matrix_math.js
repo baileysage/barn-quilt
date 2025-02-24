@@ -21,7 +21,7 @@ const Symmetry = {
     Vertical: 'Vertical',
     Horizontal: 'Horizontal',
     Full: 'Full',
-   // Block: 'Block', // TODO: Add block size and repeat functions
+    Rotational: 'Rotational',
     None: 'None'
 };
 
@@ -89,25 +89,31 @@ class LEDTriMatrix {
         }
     }
 
-    update(triPosition, newColor){
+    update(triPosition, newColor, isForeground){
+        let nonEditableColor = color(150, 150, 150);
         switch(this.sym) {
             case Symmetry.None:
                 this.tris[triPosition].update(newColor);
                 break;
             case Symmetry.Vertical:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
                 break;
             case Symmetry.Horizontal:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
                 break;
             case Symmetry.Full:
                 this.tris[triPosition].update(newColor);
-                this.tris[triMatrix.calcHorizontalSymmetry(triPosition)].update(newColor);
-                this.tris[triMatrix.calcVerticalSymmetry(triPosition)].update(newColor);
-                this.tris[triMatrix.calc180Symmetry(triPosition)].update(newColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calcVertAndHorizSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
                 break;
+            case Symmetry.Rotational:
+                this.tris[triPosition].update(newColor);
+                this.tris[this.calc90RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calc180RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calc270RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
             default: 
                 this.tris[triPosition].update(newColor);
         } 
@@ -121,6 +127,7 @@ class LEDTriMatrix {
         switch(this.sym) {
             case Symmetry.Vertical:
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return this.totalWidth() / 2;
             case Symmetry.Horizontal:
             case Symmetry.None:
@@ -133,6 +140,7 @@ class LEDTriMatrix {
         switch(this.sym) {
             case Symmetry.Horizontal:
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return this.totalWidth() / 2;
             case Symmetry.Vertical:
             case Symmetry.None:
@@ -150,6 +158,7 @@ class LEDTriMatrix {
             case Symmetry.Horizontal:
                 return triPosition < this.matrixWidth * this.matrixWidth;
             case Symmetry.Full:
+            case Symmetry.Rotational:
                 return (triPosition < this.matrixWidth * this.matrixWidth) && 
                         (triPosition % this.matrixWidth < this.matrixWidth / 2);
             default: 
@@ -158,10 +167,11 @@ class LEDTriMatrix {
     }
 
     resetColors(defaultColor) {
+        let nonEditableColor = color(150, 150, 150);
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                let drawColor = this.isControllable(index) ? defaultColor : color(150, 150, 150);
+                let drawColor = this.isControllable(index) ? defaultColor : nonEditableColor;
                 this.tris[index] = new LEDTri(
                     x,
                     y,
@@ -211,8 +221,52 @@ class LEDTriMatrix {
         return ((this.matrixWidth * 2) - yRow - 1) * this.matrixWidth + xCol;
     }
 
-    calc180Symmetry(triPosition){
+    calcVertAndHorizSymmetry(triPosition){
         return this.calcHorizontalSymmetry(this.calcVerticalSymmetry(triPosition));
+    }
+
+    calc90RotationalSymmetry(triPosition) {
+        let xColIn = triPosition % this.matrixWidth;
+        let yRowIn = (triPosition - xColIn) / this.matrixWidth;
+
+        let xColOut = this.matrixWidth - Math.floor(yRowIn / 2) - 1;
+        let yRowOut = 2 * xColIn;
+        if (xColIn % 2 ){ // Odd columns
+            if (yRowIn % 4 == 1 || yRowIn % 4 == 2){
+                yRowOut = yRowOut + 1;
+            }
+        }
+        else { // Even columns
+            if (yRowIn % 4 == 0 || yRowIn % 4 == 3){
+                yRowOut = yRowOut + 1;
+            }
+        }
+        
+        return this.matrixWidth * yRowOut + xColOut;
+    }
+
+    calc180RotationalSymmetry(triPosition) {
+        return this.matrixWidth * this.matrixWidth * 2 - triPosition - 1;
+    }
+
+    calc270RotationalSymmetry(triPosition) {
+        let xColIn = triPosition % this.matrixWidth;
+        let yRowIn = (triPosition - xColIn) / this.matrixWidth;
+
+        let xColOut = Math.floor(yRowIn / 2);
+        let yRowOut = 2 * ( this.matrixWidth - xColIn) - 1;
+        if (xColIn % 2 ){ // Odd columns
+            if (yRowIn % 4 == 1 || yRowIn % 4 == 2){
+                yRowOut = yRowOut - 1;
+            }
+        }
+        else { // Even columns
+            if (yRowIn % 4 == 0 || yRowIn % 4 == 3){
+                yRowOut = yRowOut - 1;
+            }
+        }
+        
+        return this.matrixWidth * yRowOut + xColOut;
     }
 
 }

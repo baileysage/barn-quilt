@@ -1,36 +1,41 @@
 let triMatrix = new LEDTriMatrix(8, 60, Symmetry.None);
-var color_a_pick;
-var color_b_pick;
+var background_color_pick;
+var foreground_color_pick;
 
 function setup() {
-    createCanvas(700, 480);
+    const canvas = createCanvas(750, 480);
+    canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     background("white");
 
     noSymbutton = createButton('No Symmetry');
-    noSymbutton.position(550, 65);
+    noSymbutton.position(550, 35);
     noSymbutton.mousePressed(setNoSymmetry);
     noSymbutton.style('background-color', "lightskyblue");
 
     hSymbutton = createButton('Horizontal Symmetry');
-    hSymbutton.position(550, 95);
+    hSymbutton.position(550, 65);
     hSymbutton.mousePressed(setHorizSymmetry);
 
     vSymbutton = createButton('Vertical Symmetry');
-    vSymbutton.position(550,125);
+    vSymbutton.position(550,95);
     vSymbutton.mousePressed(setVertSymmetery);
 
-    fSymbutton = createButton('Full Symmetry');
-    fSymbutton.position(550, 155);
+    fSymbutton = createButton('Horiz AND Vert Symmetry');
+    fSymbutton.position(550, 125);
     fSymbutton.mousePressed(setFullSymmetry);
+
+    rSymbutton = createButton('Rotational Symmetry');
+    rSymbutton.position(550, 155);
+    rSymbutton.mousePressed(setRotationalSymmetry);
 
     resetbutton = createButton('Reset');
     resetbutton.position(550, 185);
     resetbutton.mousePressed(resetGrid);
 
-    color_a_pick = createColorPicker("red");
-    color_a_pick.position(550, 215);
-    color_b_pick = createColorPicker("yellow");
-    color_b_pick.position(550, 255);
+    background_color_pick = createColorPicker("red");
+    background_color_pick.position(550, 235);
+    foreground_color_pick = createColorPicker("yellow");
+    foreground_color_pick.position(550, 285);
     
     resetGrid();
 }
@@ -38,8 +43,9 @@ function setup() {
 function draw() {
     triMatrix.draw();
     fill(color(0, 0, 0));
-    text("Color A", 615, 227);
-    text("Color B", 615, 267);
+    text("Background Color", 542, 220);
+    text("Foreground Color", 542, 270);
+
 }
 
 function setNoSymmetry(){
@@ -48,6 +54,7 @@ function setNoSymmetry(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -57,6 +64,7 @@ function setHorizSymmetry(){
     hSymbutton.style('background-color', "lightskyblue");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -66,6 +74,7 @@ function setVertSymmetery(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightskyblue");
     fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightgrey");
     resetGrid();
 }
 
@@ -75,11 +84,22 @@ function setFullSymmetry(){
     hSymbutton.style('background-color', "lightgrey");
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightskyblue");
+    rSymbutton.style('background-color', "lightgrey");
+    resetGrid();
+}
+
+function setRotationalSymmetry(){
+    triMatrix.sym = Symmetry.Rotational;
+    noSymbutton.style('background-color', "lightgrey");
+    hSymbutton.style('background-color', "lightgrey");
+    vSymbutton.style('background-color', "lightgrey");
+    fSymbutton.style('background-color', "lightgrey");
+    rSymbutton.style('background-color', "lightskyblue");
     resetGrid();
 }
 
 function resetGrid(){
-    triMatrix.resetColors(color_a_pick.color());
+    triMatrix.resetColors(background_color_pick.color());
 }
 
 let isMousePressed = false;
@@ -102,7 +122,12 @@ function mousePressed() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.update(triPosition, color_b_pick.color());
+        if (mouseButton == LEFT){
+            triMatrix.update(triPosition, foreground_color_pick.color(), true);
+        }
+        if (mouseButton == RIGHT){
+            triMatrix.update(triPosition, background_color_pick.color(), false);
+        }
     }
 }
 
@@ -112,7 +137,12 @@ function mouseDragged() {
         triPosition = triMatrix.calcTrianglePosition(mouseX, mouseY);
     }
     if (triPosition >= 0) {
-        triMatrix.update(triPosition, color_b_pick.color());
+        if (mouseButton == LEFT){
+            triMatrix.update(triPosition, foreground_color_pick.color(), true);
+        }
+        if (mouseButton == RIGHT){
+            triMatrix.update(triPosition, background_color_pick.color(), false);
+        }
     }
 }
 
