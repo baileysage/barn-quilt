@@ -226,9 +226,23 @@ class LEDTriMatrix {
     }
 
     calc90RotationalSymmetry(triPosition) {
-        let xCol = triPosition % this.matrixWidth;
-        let yRow = (triPosition - xCol) / this.matrixWidth;
-        return triPosition;
+        let xColIn = triPosition % this.matrixWidth;
+        let yRowIn = (triPosition - xColIn) / this.matrixWidth;
+
+        let xColOut = this.matrixWidth - Math.floor(yRowIn / 2) - 1;
+        let yRowOut = 2 * xColIn;
+        if (xColIn % 2 ){ // Odd columns
+            if (yRowIn % 4 == 1 || yRowIn % 4 == 2){
+                yRowOut = yRowOut + 1;
+            }
+        }
+        else { // Even columns
+            if (yRowIn % 4 == 0 || yRowIn % 4 == 3){
+                yRowOut = yRowOut + 1;
+            }
+        }
+        
+        return this.matrixWidth * yRowOut + xColOut;
     }
 
     calc180RotationalSymmetry(triPosition) {
@@ -236,7 +250,23 @@ class LEDTriMatrix {
     }
 
     calc270RotationalSymmetry(triPosition) {
-        return triPosition;
+        let xColIn = triPosition % this.matrixWidth;
+        let yRowIn = (triPosition - xColIn) / this.matrixWidth;
+
+        let xColOut = Math.floor(yRowIn / 2);
+        let yRowOut = 2 * ( this.matrixWidth - xColIn) - 1;
+        if (xColIn % 2 ){ // Odd columns
+            if (yRowIn % 4 == 1 || yRowIn % 4 == 2){
+                yRowOut = yRowOut - 1;
+            }
+        }
+        else { // Even columns
+            if (yRowIn % 4 == 0 || yRowIn % 4 == 3){
+                yRowOut = yRowOut - 1;
+            }
+        }
+        
+        return this.matrixWidth * yRowOut + xColOut;
     }
 
 }
