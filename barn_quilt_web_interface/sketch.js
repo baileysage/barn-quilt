@@ -5,7 +5,6 @@ var foreground_color_pick;
 function setup() {
     const canvas = createCanvas(750, 480);
     canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
-    background("white");
 
     noSymbutton = createButton('No Symmetry');
     noSymbutton.position(550, 35);
@@ -36,15 +35,17 @@ function setup() {
     background_color_pick.position(550, 235);
     foreground_color_pick = createColorPicker("yellow");
     foreground_color_pick.position(550, 285);
-    
+    background(220);
+
+    text("Background Color", 542, 220);
+    text("Foreground Color", 542, 280);
+
     resetGrid();
 }
 
 function draw() {
     triMatrix.draw();
     fill(color(0, 0, 0));
-    text("Background Color", 542, 220);
-    text("Foreground Color", 542, 270);
 
 }
 
@@ -85,8 +86,8 @@ function setFullSymmetry(){
     vSymbutton.style('background-color', "lightgrey");
     fSymbutton.style('background-color', "lightskyblue");
     rSymbutton.style('background-color', "lightgrey");
-    resetGrid();
-}
+        resetGrid();
+    }
 
 function setRotationalSymmetry(){
     triMatrix.sym = Symmetry.Rotational;

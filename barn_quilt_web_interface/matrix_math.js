@@ -83,7 +83,6 @@ class LEDTriMatrix {
     }
 
     draw() {
-        background(220);
         for (let i = 0; i < this.matrixWidth * this.matrixWidth * 2; i++) {
             this.tris[i].draw();
         }
@@ -166,12 +165,12 @@ class LEDTriMatrix {
         }
     }
 
-    resetColors(defaultColor) {
+    resetColors(defaultBackgroundColor) {
         let nonEditableColor = color(150, 150, 150);
         let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                let drawColor = this.isControllable(index) ? defaultColor : nonEditableColor;
+                let drawColor = this.isControllable(index) ? defaultBackgroundColor : nonEditableColor;
                 this.tris[index] = new LEDTri(
                     x,
                     y,
