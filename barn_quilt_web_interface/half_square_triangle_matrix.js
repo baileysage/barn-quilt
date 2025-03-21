@@ -7,8 +7,8 @@ const Symmetry = {
     None: 'None'
 };
 
-class LEDTri {
-    constructor(x, y, sideLen, fillColor, ledNum) {
+class HalfSquareTriangle {
+    constructor(x, y, sideLen, fillColor) {
         this.x = x;
         this.y = y;
         this.sideLen = sideLen;
@@ -55,7 +55,7 @@ class LEDTri {
     }
 }
 
-class LEDTriMatrix {
+class HalfSquareTriangleMatrix {
     constructor(matrixWidth, triSize, sym) {
         this.matrixWidth = matrixWidth;
         this.triSize = triSize;
@@ -151,7 +151,7 @@ class LEDTriMatrix {
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
                 let drawColor = this.isControllable(y*this.matrixWidth + x) ? defaultBackgroundColor : nonEditableColor;
-                this.tris[y*this.matrixWidth + x] = new LEDTri(
+                this.tris[y*this.matrixWidth + x] = new HalfSquareTriangle(
                     x,
                     y,
                     this.triSize,

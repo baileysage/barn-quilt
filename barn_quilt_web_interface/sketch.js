@@ -1,4 +1,4 @@
-let triMatrix = new LEDTriMatrix(8, 60, Symmetry.None);
+let triMatrix = new HalfSquareTriangleMatrix(8, 60, Symmetry.None);
 var background_color_pick;
 var foreground_color_pick;
 
