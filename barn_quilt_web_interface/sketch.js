@@ -45,8 +45,6 @@ function setup() {
 
 function draw() {
     triMatrix.draw();
-    fill(color(0, 0, 0));
-
 }
 
 function setNoSymmetry(){
@@ -100,7 +98,7 @@ function setRotationalSymmetry(){
 }
 
 function resetGrid(){
-    triMatrix.resetColors(background_color_pick.color());
+    triMatrix.resetGrid(background_color_pick.value());
 }
 
 let isMousePressed = false;
@@ -124,10 +122,10 @@ function mousePressed() {
     }
     if (triPosition >= 0) {
         if (mouseButton == LEFT){
-            triMatrix.update(triPosition, foreground_color_pick.color(), true);
+            triMatrix.updateTriangle(triPosition, foreground_color_pick.value(), true);
         }
         if (mouseButton == RIGHT){
-            triMatrix.update(triPosition, background_color_pick.color(), false);
+            triMatrix.updateTriangle(triPosition, background_color_pick.value(), false);
         }
     }
 }
@@ -139,10 +137,10 @@ function mouseDragged() {
     }
     if (triPosition >= 0) {
         if (mouseButton == LEFT){
-            triMatrix.update(triPosition, foreground_color_pick.color(), true);
+            triMatrix.updateTriangle(triPosition, foreground_color_pick.value(), true);
         }
         if (mouseButton == RIGHT){
-            triMatrix.update(triPosition, background_color_pick.color(), false);
+            triMatrix.updateTriangle(triPosition, background_color_pick.value(), false);
         }
     }
 }
