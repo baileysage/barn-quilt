@@ -10,31 +10,40 @@ function setup() {
     noSymbutton.position(550, 35);
     noSymbutton.mousePressed(setNoSymmetry);
     noSymbutton.style('background-color', "lightskyblue");
+    noSymbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     hSymbutton = createButton('Horizontal Symmetry');
     hSymbutton.position(550, 65);
     hSymbutton.mousePressed(setHorizSymmetry);
+    hSymbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     vSymbutton = createButton('Vertical Symmetry');
     vSymbutton.position(550,95);
     vSymbutton.mousePressed(setVertSymmetery);
+    vSymbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     fSymbutton = createButton('Horiz AND Vert Symmetry');
     fSymbutton.position(550, 125);
     fSymbutton.mousePressed(setFullSymmetry);
+    fSymbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     rSymbutton = createButton('Rotational Symmetry');
     rSymbutton.position(550, 155);
     rSymbutton.mousePressed(setRotationalSymmetry);
+    rSymbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     resetbutton = createButton('Reset');
     resetbutton.position(550, 185);
     resetbutton.mousePressed(resetGrid);
+    resetbutton.elt.addEventListener("contextmenu", (e) => e.preventDefault());
 
     background_color_pick = createColorPicker("red");
     background_color_pick.position(550, 235);
+    background_color_pick.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     foreground_color_pick = createColorPicker("yellow");
     foreground_color_pick.position(550, 285);
+    foreground_color_pick.elt.addEventListener("contextmenu", (e) => e.preventDefault());
+    
     background(220);
 
     text("Background Color", 542, 220);
