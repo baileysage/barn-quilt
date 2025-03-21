@@ -1,21 +1,3 @@
-let m_leds = [
-    111, 112, 79, 80, 47, 48, 15, 16,
-    110, 113, 78, 81, 46, 49, 14, 17,
-    109, 77, 114, 45, 82, 13, 50, 18,
-    108, 76, 115, 44, 83, 12, 51, 19,
-    75, 107, 43, 116, 11, 84, 20, 52,
-    74, 106, 42, 117, 10, 85, 21, 53,
-    73, 41, 105, 9, 118, 22, 86, 54,
-    72, 40, 104, 8, 119, 23, 87, 55,
-    39, 71, 7, 103, 24, 120, 56, 88,
-    38, 70, 6, 102, 25, 121, 57, 89,
-    37, 5, 69, 26, 101, 58, 122, 90,
-    36, 4, 68, 27, 100, 59, 123, 91,
-    3, 35, 28, 67, 60, 99, 92, 124,
-    2, 34, 29, 66, 61, 98, 93, 125,
-    1, 30, 33, 62, 65, 94, 97, 126,
-    0, 31, 32, 63, 64, 95, 96, 127
-];
 
 const Symmetry = {
     Vertical: 'Vertical',
@@ -31,7 +13,6 @@ class LEDTri {
         this.y = y;
         this.sideLen = sideLen;
         this.fillColor = fillColor;
-        this.ledNum = ledNum;
     }
 
     update(newColor) {
@@ -167,18 +148,15 @@ class LEDTriMatrix {
 
     resetColors(defaultBackgroundColor) {
         let nonEditableColor = color(150, 150, 150);
-        let index = 0;
         for (let y = 0; y < this.matrixWidth * 2; y++) {
             for (let x = 0; x < this.matrixWidth; x++) {
-                let drawColor = this.isControllable(index) ? defaultBackgroundColor : nonEditableColor;
-                this.tris[index] = new LEDTri(
+                let drawColor = this.isControllable(y*this.matrixWidth + x) ? defaultBackgroundColor : nonEditableColor;
+                this.tris[y*this.matrixWidth + x] = new LEDTri(
                     x,
                     y,
                     this.triSize,
-                    drawColor,
-                    index //m_leds[(index - 1) % 64]
+                    drawColor
                 );
-                index++;
             }
         }
     }
