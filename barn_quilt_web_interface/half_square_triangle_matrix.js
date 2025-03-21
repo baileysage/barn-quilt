@@ -56,47 +56,71 @@ class HalfSquareTriangle {
 }
 
 class HalfSquareTriangleMatrix {
-    constructor(matrixWidth, triSize, sym) {
+    constructor(matrixWidth, triSize, sym, colorOpts) {
         this.matrixWidth = matrixWidth;
         this.triSize = triSize;
         this.tris = [];
         this.sym = sym;
-    }
+        this.nonEditableColor ='#969696';
+        this.foregroundColor = 'yellow';
+        this.backgroundColor = 'red';
+        if(colorOpts){
+            this.nonEditableColor = (colorOpts['nonEditable'] ? colorOpts['nonEditable'] : '#969696');
+            this.foregroundColor = (colorOpts['foreground'] ? colorOpts['foreground'] : 'yellow');
+            this.backgroundColor = (colorOpts['background'] ? colorOpts['background'] : 'red');
+        }
 
-    draw() {
-        for (let i = 0; i < this.matrixWidth * this.matrixWidth * 2; i++) {
-            this.tris[i].draw();
+        for (let y = 0; y < this.matrixWidth * 2; y++) {
+            for (let x = 0; x < this.matrixWidth; x++) {
+                let drawColor = this.isControllable(y*this.matrixWidth + x) ? this.backgroundColor : this.nonEditableColor;
+                this.tris[y*this.matrixWidth + x] = new HalfSquareTriangle(
+                    x,
+                    y,
+                    this.triSize,
+                    drawColor
+                );
+            }
         }
     }
 
-    update(triPosition, newColor, isForeground){
-        let nonEditableColor = color(150, 150, 150);
+    draw() {
+        this.tris.forEach(tri => {
+            tri.draw();
+        });
+    }
+
+    updateTriangle(triPosition, newColor, isForeground){
+
         switch(this.sym) {
             case Symmetry.None:
                 this.tris[triPosition].update(newColor);
                 break;
             case Symmetry.Vertical:
                 this.tris[triPosition].update(newColor);
-                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
                 break;
             case Symmetry.Horizontal:
                 this.tris[triPosition].update(newColor);
-                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
                 break;
             case Symmetry.Full:
                 this.tris[triPosition].update(newColor);
-                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
-                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
-                this.tris[this.calcVertAndHorizSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calcHorizontalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
+                this.tris[this.calcVerticalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
+                this.tris[this.calcVertAndHorizSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
                 break;
             case Symmetry.Rotational:
                 this.tris[triPosition].update(newColor);
-                this.tris[this.calc90RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
-                this.tris[this.calc180RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
-                this.tris[this.calc270RotationalSymmetry(triPosition)].update(isForeground ? newColor : nonEditableColor);
+                this.tris[this.calc90RotationalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
+                this.tris[this.calc180RotationalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
+                this.tris[this.calc270RotationalSymmetry(triPosition)].update(isForeground ? newColor : this.nonEditableColor);
             default: 
                 this.tris[triPosition].update(newColor);
         } 
+    }
+
+    updateColors(isForeground){
+        
     }
 
     totalWidth() {
@@ -146,19 +170,11 @@ class HalfSquareTriangleMatrix {
         }
     }
 
-    resetColors(defaultBackgroundColor) {
-        let nonEditableColor = color(150, 150, 150);
-        for (let y = 0; y < this.matrixWidth * 2; y++) {
-            for (let x = 0; x < this.matrixWidth; x++) {
-                let drawColor = this.isControllable(y*this.matrixWidth + x) ? defaultBackgroundColor : nonEditableColor;
-                this.tris[y*this.matrixWidth + x] = new HalfSquareTriangle(
-                    x,
-                    y,
-                    this.triSize,
-                    drawColor
-                );
-            }
-        }
+    resetGrid(defaultBackgroundColor) {
+        if (defaultBackgroundColor) this.backgroundColor = defaultBackgroundColor;
+        this.tris.forEach(tri => {
+            tri.fillColor = (this.isControllable(tri.y*this.matrixWidth + tri.x) ? this.backgroundColor : this.nonEditableColor);
+        });
     }
 
     calcTrianglePosition(xPos, yPos) {
